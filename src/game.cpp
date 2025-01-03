@@ -1,6 +1,7 @@
 #include "game.h"
-#include <iostream>
+
 #include "SDL.h"
+#include <iostream>
 
 Game::Game(std::size_t grid_width, std::size_t grid_height,
            GameSetup &game_setup)
@@ -67,7 +68,8 @@ void Game::PlaceFood() {
 }
 
 void Game::Update() {
-  if (!snake.alive) return;
+  if (!snake.alive)
+    return;
 
   snake.Update();
 
