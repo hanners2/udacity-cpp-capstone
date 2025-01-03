@@ -1,6 +1,7 @@
 #include <iostream>
 #include "controller.h"
 #include "game.h"
+#include "gamesetup.h"
 #include "renderer.h"
 
 int main() {
@@ -13,7 +14,13 @@ int main() {
 
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
   Controller controller;
-  Game game(kGridWidth, kGridHeight);
+
+  // Allow the user to input customization(s) to the game before it begins
+  GameSetup game_setup;
+  //game_setup.AskForUserInput(renderer);
+
+  // TODO: Use move semantics for game_setup
+  Game game(kGridWidth, kGridHeight, game_setup);
   game.Run(controller, renderer, kMsPerFrame);
   std::cout << "Game has terminated successfully!\n";
   std::cout << "Score: " << game.GetScore() << "\n";
