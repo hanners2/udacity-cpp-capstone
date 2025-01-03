@@ -18,6 +18,7 @@ class Game {
  private:
   Snake snake;
   SDL_Point food;
+  float difficulty; // Defines the starting level of difficulty (0,1]
 
   std::random_device dev;
   std::mt19937 engine;
