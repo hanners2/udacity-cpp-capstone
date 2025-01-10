@@ -1,6 +1,7 @@
 #include "game.h"
 
 #include "SDL.h"
+#include <cmath>
 #include <iostream>
 
 Game::Game(std::size_t grid_width, std::size_t grid_height,
@@ -10,6 +11,7 @@ Game::Game(std::size_t grid_width, std::size_t grid_height,
       random_h(0, static_cast<int>(grid_height - 1)),
       difficulty(game_setup.GetDifficulty()) {
   PlaceFood();
+  ImplementDifficulty();
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer,
@@ -67,6 +69,27 @@ void Game::PlaceFood() {
   }
 }
 
+float Game::DifficultyToSpeed(float diff) const {
+  // Snake speed needs to grow logarithmically, or the game can quickly become
+  // unplayable. This function implements the logic to convert a unitless
+  // difficulty value (starting between 0.1 and 1.0) to a snake speed on a log
+  // scale.
+  return 0.5 * std::log10(diff + 1.2);
+}
+
+// Set any parameters that should be influenced by the difficulty level. For
+// now, just snake speed.
+void Game::ImplementDifficulty() {
+  // Standard difficulty levels are 0.1, 0.5, 1.0 (unitless)
+  snake.speed = DifficultyToSpeed(difficulty);
+}
+
+void Game::IncrementDifficulty() {
+  // Increase the speed along the log scale
+  difficulty += 0.02;
+  snake.speed = DifficultyToSpeed(difficulty);
+}
+
 void Game::Update() {
   if (!snake.alive)
     return;
@@ -82,7 +105,7 @@ void Game::Update() {
     PlaceFood();
     // Grow snake and increase speed.
     snake.GrowBody();
-    snake.speed += 0.02;
+    IncrementDifficulty();
   }
 }
 

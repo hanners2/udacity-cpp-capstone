@@ -28,6 +28,9 @@ private:
 
   int score{0};
 
+  float DifficultyToSpeed(float diff) const;
+  void ImplementDifficulty();
+  void IncrementDifficulty();
   void PlaceFood();
   void Update();
 };
