@@ -1,5 +1,6 @@
 #include "gamesetup.h"
 
+#include "controller.h"
 #include "renderer.h"
 
 #include <exception>
@@ -12,7 +13,7 @@ GameSetup::GameSetup() : difficulty(DifficultyLevels::kMedium) {
 }
 
 // Sets up a welcome screen that gets input from the user.
-void GameSetup::AskForUserInput(Renderer &renderer) {
+bool GameSetup::AskForUserInput(Renderer &renderer, Controller &controller) {
   // TODO
   // Set the text (Comes from a data file)
   // Create a screen with text and three buttons (easy, medium, hard)
@@ -22,6 +23,9 @@ void GameSetup::AskForUserInput(Renderer &renderer) {
   bool running{true};
 
   while (waiting_for_selection && running) {
+    // Handle inputs
+    controller.HandleDifficultySelection(waiting_for_selection, running, this);
+
     // Render
     renderer.UpdateWindowTitle(0, 0);
     renderer.RenderWelcomeScreen(easyButton, medButton, hardButton);

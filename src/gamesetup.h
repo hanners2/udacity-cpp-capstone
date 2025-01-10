@@ -5,6 +5,9 @@
 
 #include "renderer.h"
 
+// Forward declaration
+class Controller;
+
 namespace DifficultyLevels {
 constexpr float kEasy = 0.1;
 constexpr float kMedium = 0.5;
@@ -22,17 +25,20 @@ public:
   void SetDifficulty(float diff);
 
   // Typical behavior methods
-  void AskForUserInput(Renderer &renderer); // Sets up a welcome screen that
-                                            // gets input from the user.
+  bool AskForUserInput(Renderer &renderer,
+                       Controller &controller); // Sets up a welcome screen that
+                                                // gets input from the user.
+
+  // Need to know where the difficulty buttons are, so that we can see if a
+  // click happened on them
+  SDL_Rect easyButton;
+  SDL_Rect medButton;
+  SDL_Rect hardButton;
 
 private:
   float difficulty;       // Defines the starting level of difficulty (0,1]
   void CheckDifficulty(); // Checks the invariant on difficulty
 
-  // Need to know where the difficulty buttons are, so that we can see if a click happened on them
-  SDL_Rect easyButton;
-  SDL_Rect medButton;
-  SDL_Rect hardButton;
   void SetButtonLocations(Renderer &renderer);
 };
 
