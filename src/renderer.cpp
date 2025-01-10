@@ -5,10 +5,8 @@
 Renderer::Renderer(const std::size_t screen_width,
                    const std::size_t screen_height,
                    const std::size_t grid_width, const std::size_t grid_height)
-    : screen_width(screen_width),
-      screen_height(screen_height),
-      grid_width(grid_width),
-      grid_height(grid_height) {
+    : screen_width(screen_width), screen_height(screen_height),
+      grid_width(grid_width), grid_height(grid_height) {
   // Initialize SDL
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     std::cerr << "SDL could not initialize.\n";
@@ -38,8 +36,8 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-  std::size_t const Renderer::GetScreenWidth() { return screen_width; }
-  std::size_t const Renderer::GetScreenHeight()  { return screen_height; }
+  std::size_t Renderer::GetScreenWidth() const { return screen_width; }
+  std::size_t Renderer::GetScreenHeight() const { return screen_height; }
 
 void Renderer::RenderWelcomeScreen(SDL_Rect button1, SDL_Rect button2, SDL_Rect button3) {
   // Clear screen
@@ -49,6 +47,9 @@ void Renderer::RenderWelcomeScreen(SDL_Rect button1, SDL_Rect button2, SDL_Rect 
                          colors[ColorNames::kBlack][3]);
   SDL_RenderClear(sdl_renderer);
 
+  // TODO: Write some welcome message above the buttons
+
+  //TODO Add text to buttons
   // Place buttons on screen
   CreateButton(button1, ColorNames::kBlue);
   CreateButton(button2, ColorNames::kBlue);
@@ -56,9 +57,6 @@ void Renderer::RenderWelcomeScreen(SDL_Rect button1, SDL_Rect button2, SDL_Rect 
 
   // Update Screen
   SDL_RenderPresent(sdl_renderer);
-
-  // For testing:: Hold 5 sec to see if anything happens
-  // SDL_Delay(5000);
 }
 
 void Renderer::Render(Snake const snake, SDL_Point const &food) {
@@ -113,7 +111,8 @@ void Renderer::Render(Snake const snake, SDL_Point const &food) {
 }
 
 void Renderer::UpdateWindowTitle(int score, int fps) {
-  std::string title{"Snake Score: " + std::to_string(score) + " FPS: " + std::to_string(fps)};
+  std::string title{"Snake Score: " + std::to_string(score) +
+                    " FPS: " + std::to_string(fps)};
   SDL_SetWindowTitle(sdl_window, title.c_str());
 }
 

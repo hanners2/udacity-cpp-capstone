@@ -5,12 +5,12 @@
 #include "snake.h"
 
 class Controller {
- public:
+public:
   void HandleInput(bool &running, Snake &snake) const;
   void HandleDifficultySelection(bool &waiting, bool &running,
                                  GameSetup *game_setup);
 
- private:
+private:
   void ChangeDirection(Snake &snake, Snake::Direction input,
                        Snake::Direction opposite) const;
 };
