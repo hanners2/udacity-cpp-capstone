@@ -16,7 +16,10 @@ class Renderer {
            const std::size_t grid_width, const std::size_t grid_height);
   ~Renderer();
 
-  void RenderWelcomeScreen(); // Render welcome screen
+  std::size_t const GetScreenWidth();
+  std::size_t const GetScreenHeight();
+
+  void RenderWelcomeScreen(SDL_Rect button1, SDL_Rect button2, SDL_Rect button3); // Render welcome screen
   void Render(Snake const snake,
               SDL_Point const &food); // Render snake game screen
   void UpdateWindowTitle(int score, int fps);
@@ -30,8 +33,7 @@ class Renderer {
   const std::size_t grid_width;
   const std::size_t grid_height;
 
-  void CreateButton(std::size_t width, std::size_t height, std::size_t x,
-                    std::size_t y, ColorNames color);
+  void CreateButton(SDL_Rect button, ColorNames color);
 
   std::unordered_map<ColorNames, std::vector<Uint8>> colors = {
       {ColorNames::kBlack,  std::vector<Uint8>{0x1E, 0x1E, 0x1E, 0xFF}},

@@ -1,6 +1,8 @@
 #ifndef GAMESETUP_H
 #define GAMESETUP_H
 
+#include "SDL.h"
+
 #include "renderer.h"
 
 namespace DifficultyLevels {
@@ -26,6 +28,12 @@ public:
 private:
   float difficulty;       // Defines the starting level of difficulty (0,1]
   void CheckDifficulty(); // Checks the invariant on difficulty
+
+  // Need to know where the difficulty buttons are, so that we can see if a click happened on them
+  SDL_Rect easyButton;
+  SDL_Rect medButton;
+  SDL_Rect hardButton;
+  void SetButtonLocations(Renderer &renderer);
 };
 
 #endif

@@ -38,7 +38,10 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::RenderWelcomeScreen() {
+  std::size_t const Renderer::GetScreenWidth() { return screen_width; }
+  std::size_t const Renderer::GetScreenHeight()  { return screen_height; }
+
+void Renderer::RenderWelcomeScreen(SDL_Rect button1, SDL_Rect button2, SDL_Rect button3) {
   // Clear screen
   SDL_SetRenderDrawColor(sdl_renderer, colors[ColorNames::kBlack][0],
                          colors[ColorNames::kBlack][1],
@@ -46,30 +49,10 @@ void Renderer::RenderWelcomeScreen() {
                          colors[ColorNames::kBlack][3]);
   SDL_RenderClear(sdl_renderer);
 
-  // Set difficulty button size/position parameters
-  std::size_t num_buttons = 3;
-  std::size_t diff_button_w = screen_width / (num_buttons + 1);
-  std::size_t diff_button_h = screen_height / (num_buttons + 1);
-  std::size_t diff_button_x; // Set later for each button
-  std::size_t diff_button_y = static_cast<int>(
-      screen_height * 0.7); // All buttons are 70% down the screen
-
-  std::size_t x_spacing = diff_button_w / 4;
-
-  // Easy button
-  diff_button_x = x_spacing;
-  CreateButton(diff_button_w, diff_button_h, diff_button_x, diff_button_y,
-               ColorNames::kBlue);
-
-  // Medium button
-  diff_button_x = 2 * x_spacing + diff_button_w;
-  CreateButton(diff_button_w, diff_button_h, diff_button_x, diff_button_y,
-               ColorNames::kBlue);
-
-  // Hard button
-  diff_button_x = 3 * x_spacing + 2 * diff_button_w;
-  CreateButton(diff_button_w, diff_button_h, diff_button_x, diff_button_y,
-               ColorNames::kBlue);
+  // Place buttons on screen
+  CreateButton(button1, ColorNames::kBlue);
+  CreateButton(button2, ColorNames::kBlue);
+  CreateButton(button3, ColorNames::kBlue);
 
   // Update Screen
   SDL_RenderPresent(sdl_renderer);
@@ -134,15 +117,7 @@ void Renderer::UpdateWindowTitle(int score, int fps) {
   SDL_SetWindowTitle(sdl_window, title.c_str());
 }
 
-void Renderer::CreateButton(std::size_t width, std::size_t height,
-                            std::size_t x, std::size_t y, ColorNames color) {
-  // Make some buttons
-  SDL_Rect button;
-  button.w = width;
-  button.h = height;
-  button.x = x;
-  button.y = y;
-
+void Renderer::CreateButton(SDL_Rect button, ColorNames color) {
   SDL_SetRenderDrawColor(sdl_renderer, colors[color][0], colors[color][1],
                          colors[color][2], colors[color][3]);
   SDL_RenderFillRect(sdl_renderer, &button);
