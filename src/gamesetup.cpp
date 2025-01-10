@@ -29,6 +29,7 @@ bool GameSetup::AskForUserInput(Renderer &renderer, Controller &controller) {
     // Render
     renderer.UpdateWindowTitle(0, 0);
     renderer.RenderWelcomeScreen(easyButton, medButton, hardButton);
+    SDL_Delay(1);
   }
 
   return running;
