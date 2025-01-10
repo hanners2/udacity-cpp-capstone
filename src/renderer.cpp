@@ -1,4 +1,8 @@
 #include "renderer.h"
+
+#include "SDL.h"
+#include "SDL_ttf.h"
+
 #include <iostream>
 #include <string>
 
@@ -11,6 +15,11 @@ Renderer::Renderer(const std::size_t screen_width,
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     std::cerr << "SDL could not initialize.\n";
     std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
+  }
+  if (TTF_Init() < 0) {
+    std::cerr << "SDL_ttf could not initialize.\n";
+    std::cerr << "TTF_Error: " << TTF_GetError() << "\n";
+    SDL_Quit();
   }
 
   // Create Window
@@ -29,6 +38,9 @@ Renderer::Renderer(const std::size_t screen_width,
     std::cerr << "Renderer could not be created.\n";
     std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
   }
+
+  // Set font
+  button_font = TTF_OpenFont("../resources/FreeMonoBold.ttf", 24);
 }
 
 Renderer::~Renderer() {
@@ -49,11 +61,10 @@ void Renderer::RenderWelcomeScreen(SDL_Rect button1, SDL_Rect button2, SDL_Rect 
 
   // TODO: Write some welcome message above the buttons
 
-  //TODO Add text to buttons
   // Place buttons on screen
-  CreateButton(button1, ColorNames::kBlue);
-  CreateButton(button2, ColorNames::kBlue);
-  CreateButton(button3, ColorNames::kBlue);
+  CreateButton(button1, ColorNames::kBlue, "Easy");
+  CreateButton(button2, ColorNames::kBlue, "Medium");
+  CreateButton(button3, ColorNames::kBlue, "Hard");
 
   // Update Screen
   SDL_RenderPresent(sdl_renderer);
@@ -116,8 +127,29 @@ void Renderer::UpdateWindowTitle(int score, int fps) {
   SDL_SetWindowTitle(sdl_window, title.c_str());
 }
 
-void Renderer::CreateButton(SDL_Rect button, ColorNames color) {
+void Renderer::CreateButton(SDL_Rect button, ColorNames color,
+                            char const *text) {
+  // std::cout << "In CreateButton" << "\n";
+  //  Create a rectangle of the specified color
   SDL_SetRenderDrawColor(sdl_renderer, colors[color][0], colors[color][1],
                          colors[color][2], colors[color][3]);
   SDL_RenderFillRect(sdl_renderer, &button);
+
+  // Add text centered on the rectangl
+  SDL_Color text_color = {0, 0, 0}; // Black
+  SDL_Surface *text_surface =
+      TTF_RenderText_Solid(button_font, text, text_color);
+
+  // Center text on the button
+  SDL_Rect text_rect = button;
+  text_rect.w = text_surface->w;
+  text_rect.h = text_surface->h;
+  text_rect.x = button.x + (button.w - text_rect.w) / 2;
+  text_rect.y = button.y + (button.h - text_rect.h) / 2;
+
+  SDL_Texture *text_texture =
+      SDL_CreateTextureFromSurface(sdl_renderer, text_surface);
+  // Might this create a dangling pointer situation? Is it a problem when
+  // text_texture and text_rect go out of scope?
+  SDL_RenderCopy(sdl_renderer, text_texture, NULL, &text_rect);
 }

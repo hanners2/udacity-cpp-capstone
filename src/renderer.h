@@ -2,6 +2,8 @@
 #define RENDERER_H
 
 #include "SDL.h"
+#include "SDL_ttf.h"
+
 #include "snake.h"
 #include <unordered_map>
 #include <vector>
@@ -25,13 +27,14 @@ public:
 private:
   SDL_Window *sdl_window;
   SDL_Renderer *sdl_renderer;
+  TTF_Font *button_font;
 
   const std::size_t screen_width;
   const std::size_t screen_height;
   const std::size_t grid_width;
   const std::size_t grid_height;
 
-  void CreateButton(SDL_Rect button, ColorNames color);
+  void CreateButton(SDL_Rect button, ColorNames color, char const *text);
 
   std::unordered_map<ColorNames, std::vector<Uint8>> colors = {
       {ColorNames::kBlack, std::vector<Uint8>{0x1E, 0x1E, 0x1E, 0xFF}},
