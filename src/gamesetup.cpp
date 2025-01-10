@@ -14,6 +14,20 @@ GameSetup::GameSetup() : difficulty(DifficultyLevels::kMedium) {
 // Sets up a welcome screen that gets input from the user.
 void GameSetup::AskForUserInput(Renderer &renderer) {
   // TODO
+  // Set the text (Comes from a data file)
+  // Create a screen with text and three buttons (easy, medium, hard)
+  bool waiting_for_selection{true};
+  bool running{true};
+
+  while (waiting_for_selection && running) {
+    // Render
+    renderer.UpdateWindowTitle(0, 0);
+    renderer.RenderWelcomeScreen();
+  }
+
+  return running;
+  // Wait for user input
+  // Close and return
 }
 
 float GameSetup::GetDifficulty() const { return difficulty; }
