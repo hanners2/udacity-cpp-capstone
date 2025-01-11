@@ -50,7 +50,10 @@ Renderer::Renderer(const std::size_t screen_width,
 }
 
 Renderer::~Renderer() {
+  SDL_DestroyRenderer(sdl_renderer);
   SDL_DestroyWindow(sdl_window);
+  TTF_CloseFont(button_font);
+  TTF_Quit();
   SDL_Quit();
 }
 
@@ -155,7 +158,9 @@ void Renderer::CreateButton(SDL_Rect button, ColorNames color,
 
   SDL_Texture *text_texture =
       SDL_CreateTextureFromSurface(sdl_renderer, text_surface);
-  // Might this create a dangling pointer situation? Is it a problem when
-  // text_texture and text_rect go out of scope?
   SDL_RenderCopy(sdl_renderer, text_texture, NULL, &text_rect);
+
+  // Free the surface and texture after use
+  SDL_FreeSurface(text_surface);
+  SDL_DestroyTexture(text_texture);
 }
