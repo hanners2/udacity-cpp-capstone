@@ -40,7 +40,13 @@ Renderer::Renderer(const std::size_t screen_width,
   }
 
   // Set font
-  button_font = TTF_OpenFont("../resources/FreeMonoBold.ttf", 24);
+  char* font_path = "../resources/FreeMonoBold.ttf";
+  button_font = TTF_OpenFont(font_path, 24);
+  if (nullptr == button_font) {
+    std::cerr << "Font file at " << font_path << " could not be opened" << "\n";
+    std::cerr << "TTF_Error: " << TTF_GetError() << "\n";
+    SDL_Quit();
+  }
 }
 
 Renderer::~Renderer() {
