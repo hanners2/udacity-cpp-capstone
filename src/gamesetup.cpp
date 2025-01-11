@@ -22,12 +22,12 @@ bool GameSetup::AskForUserInput(Renderer &renderer, Controller &controller) {
   bool waiting_for_selection{true};
   bool running{true};
 
+  renderer.UpdateWindowTitle(0, 0);
   while (waiting_for_selection && running) {
     // Handle inputs
     controller.HandleDifficultySelection(waiting_for_selection, running, this);
 
-    // Render
-    renderer.UpdateWindowTitle(0, 0);
+    // Render (this must be in the loop to rerender in case the user drags it or puts another screen in front of it)
     renderer.RenderWelcomeScreen(easyButton, medButton, hardButton);
     SDL_Delay(1);
   }
