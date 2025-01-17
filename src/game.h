@@ -19,13 +19,13 @@ public:
 private:
   Snake snake;
   SDL_Point food;
-  float difficulty; // Defines the starting level of difficulty (0,1]
 
   std::random_device dev;
   std::mt19937 engine;
   std::uniform_int_distribution<int> random_w;
   std::uniform_int_distribution<int> random_h;
 
+  float difficulty; // Defines the starting level of difficulty (0,1]
   int score{0};
 
   float DifficultyToSpeed(float diff) const;
