@@ -34,7 +34,8 @@ private:
   const std::size_t grid_width;
   const std::size_t grid_height;
 
-  void CreateButton(SDL_Rect button, ColorNames color, char const *text);
+  void CreateTextRect(const SDL_Rect &rect, ColorNames rect_color,
+                    const char *text, ColorNames text_color);
 
   std::unordered_map<ColorNames, std::vector<Uint8>> colors = {
       {ColorNames::kBlack, std::vector<Uint8>{0x1E, 0x1E, 0x1E, 0xFF}},

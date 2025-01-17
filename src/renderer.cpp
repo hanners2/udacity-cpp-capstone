@@ -4,6 +4,7 @@
 #include "SDL_ttf.h"
 
 #include <iostream>
+#include <memory>
 #include <string>
 
 Renderer::Renderer(const std::size_t screen_width,
@@ -71,9 +72,9 @@ void Renderer::RenderWelcomeScreen(SDL_Rect button1, SDL_Rect button2, SDL_Rect 
   // TODO: Write some welcome message above the buttons
 
   // Place buttons on screen
-  CreateButton(button1, ColorNames::kBlue, "Easy");
-  CreateButton(button2, ColorNames::kBlue, "Medium");
-  CreateButton(button3, ColorNames::kBlue, "Hard");
+  CreateTextRect(button1, ColorNames::kBlue, "Easy", ColorNames::kBlack);
+  CreateTextRect(button2, ColorNames::kBlue, "Medium", ColorNames::kBlack);
+  CreateTextRect(button3, ColorNames::kBlue, "Hard", ColorNames::kBlack);
 
   // Update Screen
   SDL_RenderPresent(sdl_renderer);
@@ -136,31 +137,33 @@ void Renderer::UpdateWindowTitle(int score, int fps) {
   SDL_SetWindowTitle(sdl_window, title.c_str());
 }
 
-void Renderer::CreateButton(SDL_Rect button, ColorNames color,
-                            char const *text) {
-  // std::cout << "In CreateButton" << "\n";
+void Renderer::CreateTextRect(const SDL_Rect &rect, ColorNames rect_color,
+                              const char *text, ColorNames text_color) {
   //  Create a rectangle of the specified color
-  SDL_SetRenderDrawColor(sdl_renderer, colors[color][0], colors[color][1],
-                         colors[color][2], colors[color][3]);
-  SDL_RenderFillRect(sdl_renderer, &button);
+  SDL_SetRenderDrawColor(sdl_renderer, colors[rect_color][0], colors[rect_color][1],
+                         colors[rect_color][2], colors[rect_color][3]);
+  SDL_RenderFillRect(sdl_renderer, &rect);
 
-  // Add text centered on the rectangl
-  SDL_Color text_color = {0, 0, 0}; // Black
-  SDL_Surface *text_surface =
-      TTF_RenderText_Solid(button_font, text, text_color);
+  // Add text centered on the rectangle
+  SDL_Color sdl_text_color = {colors[text_color][0], colors[text_color][1],
+                              colors[text_color][2], colors[text_color][3]};
 
-  // Center text on the button
-  SDL_Rect text_rect = button;
+  std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)>
+      text_surface(TTF_RenderText_Solid(button_font, text, sdl_text_color),
+                   SDL_FreeSurface);
+
+  // Center text on the rectangle
+  SDL_Rect text_rect = rect;
   text_rect.w = text_surface->w;
   text_rect.h = text_surface->h;
-  text_rect.x = button.x + (button.w - text_rect.w) / 2;
-  text_rect.y = button.y + (button.h - text_rect.h) / 2;
+  text_rect.x = rect.x + (rect.w - text_rect.w) / 2;
+  text_rect.y = rect.y + (rect.h - text_rect.h) / 2;
+  std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)>
+      text_texture(SDL_CreateTextureFromSurface(sdl_renderer,
+                                                text_surface.get()),
+                   SDL_DestroyTexture);
+  SDL_RenderCopy(sdl_renderer, text_texture.get(), NULL, &text_rect);
 
-  SDL_Texture *text_texture =
-      SDL_CreateTextureFromSurface(sdl_renderer, text_surface);
-  SDL_RenderCopy(sdl_renderer, text_texture, NULL, &text_rect);
-
-  // Free the surface and texture after use
-  SDL_FreeSurface(text_surface);
-  SDL_DestroyTexture(text_texture);
+  // Surface and texture are automatically freed when unique_ptrs go
+  // out of scope
 }
