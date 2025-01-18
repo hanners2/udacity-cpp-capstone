@@ -61,7 +61,11 @@ Renderer::~Renderer() {
   std::size_t Renderer::GetScreenWidth() const { return screen_width; }
   std::size_t Renderer::GetScreenHeight() const { return screen_height; }
 
-void Renderer::RenderWelcomeScreen(SDL_Rect button1, SDL_Rect button2, SDL_Rect button3) {
+void Renderer::RenderWelcomeScreen(const SDL_Rect &button1,
+                                   const SDL_Rect &button2,
+                                   const SDL_Rect &button3,
+                                   const SDL_Rect &info_rect,
+                                   const char *welcome_text) {
   // Clear screen
   SDL_SetRenderDrawColor(sdl_renderer, colors[ColorNames::kBlack][0],
                          colors[ColorNames::kBlack][1],
@@ -69,7 +73,8 @@ void Renderer::RenderWelcomeScreen(SDL_Rect button1, SDL_Rect button2, SDL_Rect 
                          colors[ColorNames::kBlack][3]);
   SDL_RenderClear(sdl_renderer);
 
-  // TODO: Write some welcome message above the buttons
+  // Add info text above the buttons
+  CreateTextRect(info_rect, ColorNames::kBlack, welcome_text, ColorNames::kWhite);
 
   // Place buttons on screen
   CreateTextRect(button1, ColorNames::kBlue, "Easy", ColorNames::kBlack);

@@ -27,8 +27,9 @@ bool GameSetup::AskForUserInput(Renderer &renderer, Controller &controller) {
     // Handle inputs
     controller.HandleDifficultySelection(waiting_for_selection, running, this);
 
-    // Render (this must be in the loop to rerender in case the user drags it or puts another screen in front of it)
-    renderer.RenderWelcomeScreen(easyButton, medButton, hardButton);
+    // Render (this must be in the loop to rerender in case the user
+    // drags it or puts another screen in front of it)
+    renderer.RenderWelcomeScreen(easyButton, medButton, hardButton, infoRect, welcome_text);
     SDL_Delay(1);
   }
 
