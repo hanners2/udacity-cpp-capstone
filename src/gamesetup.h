@@ -34,6 +34,9 @@ public:
   SDL_Rect easyButton;
   SDL_Rect medButton;
   SDL_Rect hardButton;
+  SDL_Rect infoRect;
+
+  const char* welcome_text = "Select a difficulty level";
 
 private:
   float difficulty;       // Defines the starting level of difficulty (0,1]
