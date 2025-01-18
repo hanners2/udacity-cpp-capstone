@@ -79,4 +79,10 @@ void GameSetup::SetButtonLocations(Renderer &renderer) {
   hardButton.h = diff_button_h;
   hardButton.x = 3 * x_spacing + 2 * diff_button_w;
   hardButton.y = diff_button_y;
+
+  // Info text above the buttons
+  infoRect.w = 3*diff_button_w + 2*x_spacing;
+  infoRect.h = static_cast<int>(renderer.GetScreenHeight() * 0.6);
+  infoRect.x = x_spacing;
+  infoRect.y = static_cast<int>(renderer.GetScreenHeight() * 0.05);
 }
