@@ -10,7 +10,13 @@
 
 class Renderer {
 public:
-  enum class ColorNames { kBlack, kYellow, kWhite, kBlue, kRed };
+  enum class ColorNames {
+    kBlack,
+    kYellow,
+    kWhite,
+    kBlue,
+    kRed
+  };
 
   // Constructor
   Renderer(const std::size_t screen_width, const std::size_t screen_height,

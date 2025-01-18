@@ -14,8 +14,6 @@ GameSetup::GameSetup() : difficulty(DifficultyLevels::kMedium) {
 
 // Sets up a welcome screen that gets input from the user.
 bool GameSetup::AskForUserInput(Renderer &renderer, Controller &controller) {
-  // TODO
-  // Set the text (Comes from a data file)
   // Create a screen with text and three buttons (easy, medium, hard)
   SetButtonLocations(renderer);
 
@@ -34,8 +32,6 @@ bool GameSetup::AskForUserInput(Renderer &renderer, Controller &controller) {
   }
 
   return running;
-  // Wait for user input
-  // Close and return
 }
 
 float GameSetup::GetDifficulty() const { return difficulty; }
