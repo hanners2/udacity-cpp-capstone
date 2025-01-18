@@ -20,7 +20,6 @@ Renderer::Renderer(const std::size_t screen_width,
   if (TTF_Init() < 0) {
     std::cerr << "SDL_ttf could not initialize.\n";
     std::cerr << "TTF_Error: " << TTF_GetError() << "\n";
-    SDL_Quit();
   }
 
   // Create Window
@@ -45,7 +44,6 @@ Renderer::Renderer(const std::size_t screen_width,
   if (nullptr == button_font) {
     std::cerr << "Font file at " << font_path << " could not be opened" << "\n";
     std::cerr << "TTF_Error: " << TTF_GetError() << "\n";
-    SDL_Quit();
   }
 }
 
