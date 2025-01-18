@@ -12,9 +12,16 @@ class Renderer {
 public:
   enum class ColorNames { kBlack, kYellow, kWhite, kBlue, kRed };
 
+  // Constructor
   Renderer(const std::size_t screen_width, const std::size_t screen_height,
            const std::size_t grid_width, const std::size_t grid_height);
-  ~Renderer();
+  Renderer(Renderer&& r); // Move constructor
+  // Since this class contains const member variables, assignment
+  // operators don't make sense.
+  Renderer(Renderer& r) = delete; // Copy constructor
+  Renderer operator=(Renderer& r) = delete; // Copy assignment operator
+  Renderer operator=(Renderer&& r) = delete; // Move assignement operator
+  ~Renderer(); // Destructor
 
   std::size_t GetScreenWidth() const;
   std::size_t GetScreenHeight() const;

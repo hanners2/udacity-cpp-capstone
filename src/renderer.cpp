@@ -50,6 +50,19 @@ Renderer::Renderer(const std::size_t screen_width,
   }
 }
 
+// Move constructor
+Renderer::Renderer(Renderer&& r)
+    : sdl_window(r.sdl_window), sdl_renderer(r.sdl_renderer),
+      button_font(r.button_font),
+      screen_width(std::move(r.screen_width)),
+      screen_height(std::move(r.screen_height)),
+      grid_width(std::move(r.grid_width)),
+      grid_height(std::move(r.grid_height)) {
+  r.sdl_window = nullptr;
+  r.sdl_renderer = nullptr;
+  r.button_font = nullptr;
+}
+
 Renderer::~Renderer() {
   SDL_DestroyRenderer(sdl_renderer);
   SDL_DestroyWindow(sdl_window);
