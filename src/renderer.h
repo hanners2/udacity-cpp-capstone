@@ -44,8 +44,7 @@ private:
   const std::size_t grid_width;
   const std::size_t grid_height;
 
-  void CreateTextRect(const SDL_Rect &rect, ColorNames rect_color,
-                    const char *text, ColorNames text_color);
+  const char *font_path = "../resources/FreeMonoBold.ttf";
 
   std::unordered_map<ColorNames, std::vector<Uint8>> colors = {
       {ColorNames::kBlack, std::vector<Uint8>{0x1E, 0x1E, 0x1E, 0xFF}},
@@ -53,6 +52,9 @@ private:
       {ColorNames::kWhite, std::vector<Uint8>{0xFF, 0xFF, 0xFF, 0xFF}},
       {ColorNames::kBlue, std::vector<Uint8>{0x00, 0x7A, 0xCC, 0xFF}},
       {ColorNames::kRed, std::vector<Uint8>{0xFF, 0x00, 0x00, 0xFF}}};
+
+  void CreateTextRect(const SDL_Rect &rect, ColorNames rect_color,
+                    const char *text, ColorNames text_color);
 };
 
 #endif

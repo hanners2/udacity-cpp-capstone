@@ -41,7 +41,6 @@ Renderer::Renderer(const std::size_t screen_width,
   }
 
   // Set font
-  char* font_path = "../resources/FreeMonoBold.ttf";
   button_font = TTF_OpenFont(font_path, 24);
   if (nullptr == button_font) {
     std::cerr << "Font file at " << font_path << " could not be opened" << "\n";
