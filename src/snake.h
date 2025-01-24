@@ -2,6 +2,8 @@
 #define SNAKE_H
 
 #include <vector>
+#include <condition_variable>
+#include <mutex>
 #include "SDL.h"
 
 class Snake {
@@ -14,6 +16,7 @@ class Snake {
         grid_width(grid_width),
         grid_height(grid_height) {}
 
+  void Simulate(std::mutex &game_mtx, std::condition_variable &game_cond, bool &game_running);
   void Update();
 
   void GrowBody();
@@ -24,6 +27,7 @@ class Snake {
   float speed{0.1f};
   int size{1};
   bool alive{true};
+  bool update_done{false};
   float head_x;
   float head_y;
   std::vector<SDL_Point> body;

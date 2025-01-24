@@ -1,6 +1,9 @@
 #include "snake.h"
+
 #include <cmath>
+#include <condition_variable>
 #include <iostream>
+#include <mutex>
 
 void Snake::Update() {
   SDL_Point prev_cell{
@@ -76,4 +79,26 @@ bool Snake::SnakeCell(int x, int y) {
     }
   }
   return false;
+}
+
+// Perpetual loop that happens in its own thread
+void Snake::Simulate(std::mutex &game_mtx, std::condition_variable &game_cond,
+                     bool &game_running) {
+  while (true) {
+    // Only execute when we have gotten a signal from the main thread
+    // that an update is needed. This is communicated by the ability to
+    // obtain the lock.
+
+    // TODO: Should the snake actually own the mutex? If we had multiple snakes,
+    // we'd want them to all be able to execute simultaneously, not sequentially.
+    std::unique_lock<std::mutex> lck(game_mtx);
+    if (alive)
+      Update();
+    update_done = true;
+    game_cond.notify_all(); // Notify to allow the main thread to continue
+    if (!game_running) break;
+
+    // Release the lock, but wait to loop again until update_done is false
+    game_cond.wait(lck, [this] { return !update_done; });
+  }
 }

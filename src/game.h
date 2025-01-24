@@ -6,6 +6,8 @@
 #include "gamesetup.h"
 #include "renderer.h"
 #include "snake.h"
+#include <mutex>
+#include <condition_variable>
 #include <random>
 
 class Game {
@@ -28,11 +30,14 @@ private:
   float difficulty; // Defines the starting level of difficulty (0,1]
   int score{0};
 
+  std::mutex game_mtx;
+  std::condition_variable game_cond;
+
   float DifficultyToSpeed(float diff) const;
   void ImplementDifficulty();
   void IncrementDifficulty();
   void PlaceFood();
-  void Update();
+  void Update(std::unique_lock<std::mutex> &ulock);
 };
 
 #endif

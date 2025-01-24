@@ -3,6 +3,8 @@
 #include "SDL.h"
 #include <cmath>
 #include <iostream>
+#include <mutex>
+#include <thread>
 
 Game::Game(std::size_t grid_width, std::size_t grid_height,
            GameSetup &game_setup)
@@ -23,12 +25,19 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   int frame_count = 0;
   bool running = true;
 
+  // Start the snake simulation work in its own thread.
+  // Use a lock to prevent the snake from updating its location until
+  // user inputs have been processed.
+  std::unique_lock<std::mutex> lck(game_mtx);
+  std::thread t1 = std::thread(&Snake::Simulate, &snake, std::ref(game_mtx),
+                               std::ref(game_cond), std::ref(running));
+
   while (running) {
     frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
-    Update();
+    Update(lck);
     renderer.Render(snake, food);
 
     frame_end = SDL_GetTicks();
@@ -52,6 +61,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
       SDL_Delay(target_frame_duration - frame_duration);
     }
   }
+  t1.join();
 }
 
 void Game::PlaceFood() {
@@ -90,11 +100,15 @@ void Game::IncrementDifficulty() {
   snake.speed = DifficultyToSpeed(difficulty);
 }
 
-void Game::Update() {
+void Game::Update(std::unique_lock<std::mutex> &ulock) {
+  snake.update_done = false;
+  game_cond.notify_all();
+  // This will unlock only when the update is not done, then lock right
+  // after
+  game_cond.wait(ulock, [this] { return this->snake.update_done; });
+
   if (!snake.alive)
     return;
-
-  snake.Update();
 
   int new_x = static_cast<int>(snake.head_x);
   int new_y = static_cast<int>(snake.head_y);
