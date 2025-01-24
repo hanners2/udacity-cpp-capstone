@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_definitions(-std=c++17)
 
-set(CXX_FLAGS "-g -Wall")
+set(CXX_FLAGS "-g -Wall -pthread")
 set(CMAKE_CXX_FLAGS "${CXX_FLAGS}")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
