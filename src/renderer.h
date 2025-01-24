@@ -36,7 +36,7 @@ public:
   void RenderWelcomeScreen(const SDL_Rect &button1, const SDL_Rect &button2,
                            const SDL_Rect &button3, const SDL_Rect &info_rect,
                            const char *welcome_text);
-  void Render(Snake const snake,
+  void Render(Snake const &snake,
               SDL_Point const &food); // Render snake game screen
   void UpdateWindowTitle(int score, int fps);
 
