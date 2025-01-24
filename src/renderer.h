@@ -50,7 +50,7 @@ private:
   const std::size_t grid_width;
   const std::size_t grid_height;
 
-  const char *font_path = "../resources/FreeMonoBold.ttf";
+  const char *font_path = "../resources/SourceCodePro-Medium.ttf";
 
   std::unordered_map<ColorNames, std::vector<Uint8>> colors = {
       {ColorNames::kBlack, std::vector<Uint8>{0x1E, 0x1E, 0x1E, 0xFF}},
