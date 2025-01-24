@@ -80,15 +80,15 @@ void Game::PlaceFood() {
 }
 
 float Game::DifficultyToSpeed(float diff) const {
-  // Snake speed needs to grow logarithmically, or the game can quickly become
-  // unplayable. This function implements the logic to convert a unitless
-  // difficulty value (starting between 0.1 and 1.0) to a snake speed on a log
-  // scale.
+  // Snake speed needs to grow logarithmically, or the game can quickly
+  // become unplayable. This function implements the logic to convert a
+  // unitless difficulty value (starting between 0.1 and 1.0) to a
+  // snake speed on a log scale.
   return 0.5 * std::log10(diff + 1.2);
 }
 
-// Set any parameters that should be influenced by the difficulty level. For
-// now, just snake speed.
+// Set any parameters that should be influenced by the difficulty
+// level. For now, just snake speed.
 void Game::ImplementDifficulty() {
   // Standard difficulty levels are 0.1, 0.5, 1.0 (unitless)
   snake.speed = DifficultyToSpeed(difficulty);
